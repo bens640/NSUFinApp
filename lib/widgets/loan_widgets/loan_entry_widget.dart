@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nsu_financial_app/main.dart';
+import 'package:nsu_financial_app/providers/providers.dart';
 import 'package:nsu_financial_app/screens/home_screen.dart';
 
 class LoanEntry extends ConsumerWidget{

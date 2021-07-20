@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:nsu_financial_app/providers/providers.dart';
 import 'package:nsu_financial_app/screens/home_screen.dart';
 import 'package:nsu_financial_app/main.dart';
 
 
 class HomeScreenWidget extends ConsumerWidget {
   //Creates a list of links
-  Map<String, String> naviList = {'Loans': '/loan', 'Salary Calc':'/login','Documents': '/docs', 'Budget Tracker': '/budget'};
+  Map<String, String> naviList = {'Loans': '/loan', 'News':'/RssScreen','Documents': '/docs', 'Budget Tracker': '/budget'};
+  // dynamic username = await storage.read(key: 'username');
   @override
   Widget build(BuildContext context, ScopedReader watch) {
 
     final currentLoan = watch(loanProvider);
     final _schedule = currentLoan.loan.schedule;
-
-
-
+    String username = '';
+    getUser().then((value) => username = value);
     return Container(
 
       child: Column(
@@ -47,7 +48,7 @@ class HomeScreenWidget extends ConsumerWidget {
                       child: Text('$key'),
                       onTap: (){
                         Navigator.pushNamed(context, '${naviList[key]}');
-                        print(index);
+
                       },
                     ),
                   );

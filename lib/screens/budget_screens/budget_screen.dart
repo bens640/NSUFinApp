@@ -2,97 +2,196 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/all.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import 'package:nsu_financial_app/models/budget.dart';
 import 'package:http/http.dart' as http;
+import 'package:nsu_financial_app/models/category.dart';
+import 'package:nsu_financial_app/notifiers/budget_notifier.dart';
+import 'package:nsu_financial_app/notifiers/category_notifier.dart';
+import 'package:nsu_financial_app/providers/providers.dart';
+import 'package:nsu_financial_app/widgets/budget_widgets/transaction_widget.dart';
 import '../../main.dart';
 import 'dart:async';
 
-Future<Budget> fetchBudget(http.Client client) async {
-
-  final response = await http.get(Uri.parse(SERVER_IP+'/budget/1'), headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-    'Authorization': 'Token c77a22d25625664fe96a50746bf80c3a631a54d6',
-  });
-
-  final responseJson = jsonDecode(response.body);
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return Budget.fromJson(responseJson);
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load Budget');
-  }
-}
-
-Future<Transaction> fetchTrans(http.Client client) async {
-
-  final response = await http.get(Uri.parse(SERVER_IP+'/transaction/1'),
-  //     headers: {
-  //   'Content-Type': 'application/json',
-  //   'Accept': 'application/json',
-  //   'Authorization': 'Token: c77a22d25625664fe96a50746bf80c3a631a54d6',
-  // }
-  );
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    return Transaction.fromJson(jsonDecode(response.body));
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
-
-
-
-
-List<Budget> parseBudget(String responseBody) {
-  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-
-  return parsed.map<Budget>((json) => Budget.fromJson(json)).toList();
-}
+import '../../network_requests.dart';
+import 'add_trans_screen.dart';
 
 class BudgetScreen extends ConsumerWidget {
   const BudgetScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    // String tk = '';
+    // getToken().then((value) => tk = value);
+    // var curBudget = watch(budgetProvider);
+    // final currentSession = watch(curSession);
+    final futureBudget = watch(futureBudgetProvider);
+    return Scaffold(
+      body:
+          // FutureBuilder(
+          //     future: (fetchBudget()),
+          //     builder: (context, snapshot) {
+          //       print(snapshot);
+          //       if (snapshot.hasData) print(snapshot);
+          //       if (snapshot.hasData)
+          //         curBudget.budget = snapshot.data as Budget;
+          //       if (snapshot.hasError) print(snapshot.error);
+          //       if (snapshot.hasData) {
+          //         return ListView(
+          //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          //             children: [
+          //               Column(
+          //                 children: [
+          //                   Text(
+          //                     'Budget Tracker',
+          //                     style: TextStyle(fontSize: 25),
+          //                   ),
+          //                   Text(
+          //                     "Current Balance",
+          //                     style: TextStyle(fontSize: 19),
+          //                   ),
+          //                   Text(
+          //                     NumberFormat.currency(symbol: '\$')
+          //                         .format(curBudget.budget.balance),
+          //                     style: TextStyle(
+          //                         fontSize: 21, fontWeight: FontWeight.bold),
+          //                   ),
+          //                   Text('Transactions'),
+          //                   ElevatedButton(
+          //                       onPressed: () => {
+          //
+          //                             Navigator.push(
+          //                                 context,
+          //                                 MaterialPageRoute(
+          //                                   builder: (context) =>
+          //                                       AddOrEditTransaction(
+          //                                         t: Transaction(description: '', category: 0, amount: 0, budget: 0, id: 0, transactionDate: DateTime.now()),
+          //                                         isAdd: true,
+          //                                   ),
+          //                                 ))
+          //                           },
+          //                       child: Text('Add')),
+          //                   Container(
+          //                       height: 500,
+          //                       child: TransactionsWidget(curBudget.budget))
+          //                 ],
+          //               ),
+          //             ]);
+          //       } else {
+          //         return Center(child: CircularProgressIndicator());
+          //       }
+          //     } //builder
+          //     ),
 
-  return Column(
-      children: [
-        Text('Hello'),
-        Expanded(
-          child: FutureBuilder(
-            future: fetchBudget(http.Client()),
-            builder: (context, snapshot) {
-              // final Transaction trans =context.owner;
-              Budget t = snapshot.data as Budget;
-              print(t.transactions[0].description);
 
-              if (snapshot.hasError) print(snapshot.error);
 
-              return snapshot.hasData
-                  ? ListView.builder(
-                    itemCount: t.transactions.length,
-                    itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                    title: Text('Item ${t.transactions[index].description }'),
-                  );
-                },
-              )
-                  : Center(child: CircularProgressIndicator());
-            },
-          ),
-        )
-      ],
+
+      futureBudget.when(
+          data: (d) =>
+              ListView(
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+          children: [
+            Column(
+              children: [
+                Text(
+                  'Budget Tracker',
+                  style: TextStyle(fontSize: 25),
+                ),
+                Text(
+                  "Current Balance",
+                  style: TextStyle(fontSize: 19),
+                ),
+                Text(
+                  NumberFormat.currency(symbol: '\$')
+                      .format(d[0].budget.balance),
+                  style: TextStyle(
+                      fontSize: 21, fontWeight: FontWeight.bold),
+                ),
+                Text('Transactions'),
+                ElevatedButton(
+                    onPressed: () => {
+
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                AddOrEditTransaction(
+                                  t: Transaction(description: '', category: 0, amount: 0, budget: 0, id: 0, transactionDate: DateTime.now()),
+                                  isAdd: true,
+                                ),
+                          ))
+                    },
+                    child: Text('Add')),
+                Container(
+                    height: 500,
+                    child: TransactionsWidget(d[0], d[0].budget))
+              ],
+              ),
+          ]),
+          loading: () => CircularProgressIndicator(),
+          error: (d, s) => Text(s.toString())),
+
+
+      // FutureBuilder(
+      //     future: (fetchBudget()),
+      //     builder: (context, snapshot) {
+      //       print(snapshot);
+      //       if (snapshot.hasData) print(snapshot);
+      //       if (snapshot.hasData)
+      //         curBudget.budget = snapshot.data as Budget;
+      //       if (snapshot.hasError) print(snapshot.error);
+      //       if (snapshot.hasData) {
+      //         return ListView(
+      //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+      //             children: [
+      //               Column(
+      //                 children: [
+      //                   Text(
+      //                     'Budget Tracker',
+      //                     style: TextStyle(fontSize: 25),
+      //                   ),
+      //                   Text(
+      //                     "Current Balance",
+      //                     style: TextStyle(fontSize: 19),
+      //                   ),
+      //                   Text(
+      //                     NumberFormat.currency(symbol: '\$')
+      //                         .format(curBudget.budget.balance),
+      //                     style: TextStyle(
+      //                         fontSize: 21, fontWeight: FontWeight.bold),
+      //                   ),
+      //                   Text('Transactions'),
+      //                   ElevatedButton(
+      //                       onPressed: () => {
+      //
+      //                         Navigator.push(
+      //                             context,
+      //                             MaterialPageRoute(
+      //                               builder: (context) =>
+      //                                   AddOrEditTransaction(
+      //                                     t: Transaction(description: '', category: 0, amount: 0, budget: 0, id: 0, transactionDate: DateTime.now()),
+      //                                     isAdd: true,
+      //                                   ),
+      //                             ))
+      //                       },
+      //                       child: Text('Add')),
+      //                   Container(
+      //                       height: 500,
+      //                       child: TransactionsWidget(curBudget.budget))
+      //                 ],
+      //               ),
+      //             ]);
+      //       } else {
+      //         return Center(child: CircularProgressIndicator());
+      //       }
+      //     } //builder
+      // ),
+
+
+
+
+
     );
   }
 }
-

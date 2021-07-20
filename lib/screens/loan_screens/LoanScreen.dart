@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:nsu_financial_app/main.dart';
+import 'package:nsu_financial_app/providers/providers.dart';
 import 'package:nsu_financial_app/widgets/loan_widgets/loan_chart_widget.dart';
 import 'package:nsu_financial_app/widgets/loan_widgets/loan_entry_widget.dart';
 import 'package:nsu_financial_app/widgets/loan_widgets/loan_portrait_details_widget.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nsu_financial_app/providers/providers.dart';
 import 'package:nsu_financial_app/screens/home_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -10,7 +11,7 @@ class LoanTable extends ConsumerWidget {
     final currentLoan = watch(loanProvider);
 
       return DataTable(
-        columnSpacing: 15,
+        columnSpacing: 10,
         columns: const <DataColumn>[
           DataColumn(
             label: Text(
@@ -50,17 +51,7 @@ class LoanTable extends ConsumerWidget {
           ),
         ],
         rows:  _getSchedule(currentLoan.loan.schedule)
-    //   DataRow(
-    //     cells: <DataCell>[
-    //       DataCell(Text('1')),
-    //       DataCell(Text('100')),
-    //       DataCell(Text('19')),
-    //       DataCell(Text('11')),
-    //       DataCell(Text('11')),
-    //       DataCell(Text('11')),
-    //     ],
-    //   );
-    // });
+
 
 
       );

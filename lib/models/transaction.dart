@@ -23,4 +23,12 @@ class Transaction{
 
     );
   }
+  Map<String, dynamic> toJson()=>
+      {
+        "description": description,
+        "amount": amount,
+        "transaction_date": transDate,
+        "budget": budgetId,
+        "category": category
+      };
 }

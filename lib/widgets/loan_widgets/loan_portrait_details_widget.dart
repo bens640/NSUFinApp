@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:nsu_financial_app/main.dart';
+import 'package:nsu_financial_app/providers/providers.dart';
 
 class LoanShortDetail extends ConsumerWidget{
 

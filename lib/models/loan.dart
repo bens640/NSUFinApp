@@ -7,6 +7,7 @@ class Loan {
   int term;
   double monthlyPayment = 0;
   double totalInterest = 0;
+  double extraPayments = 0;
   List<dynamic> schedule = [];
   Loan({
     required this.name,
@@ -19,14 +20,14 @@ class Loan {
         monthlyPayment = 0,
         totalInterest = 0;
 
-  factory  Loan.fromJson(Map<String, dynamic> json){
-    return Loan(
-      name: json["name"],
-      amount: double.parse(json["amount"]),
-      interest: double.parse(json["interest"]),
-      term: json["term"],
-    );
-  }
+  // factory  Loan.fromJson(Map<String, dynamic> json){
+  //   return Loan(
+  //     name: json["name"],
+  //     amount: double.parse(json["amount"]),
+  //     interest: double.parse(json["interest"]),
+  //     term: json["term"],
+  //   );
+  // }
 
 
   void calcLoan(){

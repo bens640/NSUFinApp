@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:nsu_financial_app/screens/home_screen.dart';
 import '../main.dart';
 import 'dart:convert' show json, base64, ascii;
 
-class LoginPage extends StatelessWidget {
+import '../network_requests.dart';
+
+class LoginPage extends ConsumerWidget {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -17,35 +20,36 @@ class LoginPage extends StatelessWidget {
         ),
   );
 
-  Future attemptLogIn(String username, String password) async {
-    var res = await http.post(
-        Uri.parse(SERVER_IP+'/login/'),
-        body: {
-          "username": username,
-          "password": password
-        }
-    );
-    if(res.statusCode == 200) return res.body;
-    return null;
-  }
+  // Future attemptLogIn(String username, String password) async {
+  //   var res = await http.post(
+  //       Uri.parse(SERVER_IP+'/login/'),
+  //       body: {
+  //         "username": username,
+  //         "password": password
+  //       }
+  //   );
+  //   if(res.statusCode == 200) return res.body;
+  //   return null;
+  // }
 
-  Future<int> attemptSignUp(String username, String password) async {
-    var res = await http.post(
-        Uri.parse(SERVER_IP+'/signup/'),
-        body: {
-          "username": username,
-          "password": password
-        }
-    );
-    return res.statusCode;
-
-  }
+  // Future<int> attemptSignUp(String username, String password) async {
+  //   var res = await http.post(
+  //       Uri.parse(SERVER_IP+'/signup/'),
+  //       body: {
+  //         "username": username,
+  //         "password": password
+  //       }
+  //   );
+  //   return res.statusCode;
+  //
+  // }
 
   @override
-  Widget build(BuildContext context) {
-    // final currentSession = context.read(curSession);
+  Widget build(BuildContext context, ScopedReader watch) {
+    final currentSession = context.read(curSession);
     return Scaffold(
-        appBar: AppBar(title: Text("Log In"),),
+        resizeToAvoidBottomInset: false,
+        // appBar: AppBar(title: Text("Log In"),),
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -71,7 +75,11 @@ class LoginPage extends StatelessWidget {
                     if(jwt != null) {
                       Map token = json.decode(jwt);
                       String tk = token['token'];
+                      String id = token['id'].toString();
                       storage.write(key: "jwt", value: tk);
+                      storage.write(key: 'id', value: id.toString());
+                     currentSession.loggedIn = true;
+
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -80,6 +88,7 @@ class LoginPage extends StatelessWidget {
                       );
                     } else {
                       displayDialog(context, "An Error Occurred", "No account was found matching that username and password");
+                      currentSession.loggedIn = false;
                     }
                   },
                   child: Text("Log In")

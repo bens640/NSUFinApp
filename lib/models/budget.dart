@@ -1,6 +1,4 @@
-// To parse this JSON data, do
-//
-//     final budget = budgetFromJson(jsonString);
+
 import 'dart:convert';
 
 List<Budget> budgetFromJson(String str) => List<Budget>.from(json.decode(str).map((x) => Budget.fromJson(x)));
@@ -11,19 +9,23 @@ class Budget {
   Budget({
     required this.user,
     required this.transactions,
+    required this.balance
   });
 
   int user;
+  double balance = 0;
   List<Transaction> transactions;
 
   factory Budget.fromJson(Map<String, dynamic> json) => Budget(
     user: json["user"],
+    balance: double.parse(json['balance']),
     transactions: List<Transaction>.from(json["transactions"].map((x) => Transaction.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
     "user": user,
-    "transactions": List<dynamic>.from(transactions.map((x) => x.toJson())),
+    // 'balance': balance,
+    "transactions": List<dynamic>.from(transactions.map((x) => x.toJson(this.user))),
   };
 }
 
@@ -32,7 +34,6 @@ class Transaction {
     required this.id,
     required this.description,
     required this.amount,
-    required this.dateCreated,
     required this.transactionDate,
     required this.budget,
     required this.category,
@@ -40,8 +41,7 @@ class Transaction {
 
   int id;
   String description;
-  int amount;
-  DateTime dateCreated;
+  double amount;
   DateTime transactionDate;
   int budget;
   int category;
@@ -49,20 +49,19 @@ class Transaction {
   factory Transaction.fromJson(Map<String, dynamic> json) => Transaction(
     id: json["id"],
     description: json["description"],
-    amount: json["amount"],
-    dateCreated: DateTime.parse(json["date_created"]),
+    amount: double.parse(json["amount"]),
     transactionDate: DateTime.parse(json["transaction_date"]),
     budget: json["budget"],
     category: json["category"],
   );
 
-  Map<String, dynamic> toJson() => {
-    "id": id,
+
+
+  Map<String, dynamic> toJson(int id) => {
     "description": description,
     "amount": amount,
-    "date_created": "${dateCreated.year.toString().padLeft(4, '0')}-${dateCreated.month.toString().padLeft(2, '0')}-${dateCreated.day.toString().padLeft(2, '0')}",
     "transaction_date": "${transactionDate.year.toString().padLeft(4, '0')}-${transactionDate.month.toString().padLeft(2, '0')}-${transactionDate.day.toString().padLeft(2, '0')}",
-    "budget": budget,
+    "budget": id,
     "category": category,
   };
 
