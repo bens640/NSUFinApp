@@ -19,21 +19,22 @@ class LoanScreen extends ConsumerWidget {
     var isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
     final currentLoan = watch(loanProvider);
     final _schedule = currentLoan.loan.schedule;
-    return MaterialApp(
-          home: Scaffold(
-          body: Container(
-              child: ListView(
-                  children:
-                  [
-                    LoanEntry(),
-                    isPortrait? LoanShortDetail(): LoanChart()
-                  ]
-              )
+    return  Scaffold(
+          body: SafeArea(
+            child: Container(
+                child: ListView(
+                    children:
+                    [
+                      LoanEntry(),
+                      isPortrait? LoanShortDetail(): LoanChart()
+                    ]
+                )
+            ),
           )
 
 
 
 
-    ));
+    );
   }
 }

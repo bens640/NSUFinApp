@@ -1,13 +1,14 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter/src/widgets/framework.dart';
-// import 'package:flutter_riverpod/flutter_riverpod.dart';
-// import 'package:http/http.dart';
-// import 'package:nsu_financial_app/models/category.dart';
-// import 'package:nsu_financial_app/models/document.dart';
-// import 'package:nsu_financial_app/network_requests.dart';
-// import 'package:nsu_financial_app/screens/document_screens/document_screen.dart';
-//
-//
+import 'package:flutter/material.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart';
+import 'package:nsu_financial_app/models/category.dart';
+import 'package:nsu_financial_app/models/document.dart';
+import 'package:nsu_financial_app/network_requests.dart';
+import 'package:nsu_financial_app/screens/document_screens/document_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+
 // final futureP = FutureProvider<BudgetScreenModel>((ref) async {
 //   BudgetScreenModel x = await setBudgetAndCategories();
 //   int sel = 0;
@@ -19,8 +20,8 @@
 //   int sel = 1;
 //   return [x, sel];
 // });
-//
-//
+
+
 // class TestPage extends ConsumerWidget {
 //   @override
 //   Widget build(BuildContext context, ScopedReader watch) {
@@ -94,9 +95,35 @@
 //           setState(() {
 //             dropdownValue = newVal;
 //           });
-//           print(d.c.list.firstWhere((element) => element['id']== newVal));
+//           print(d.ca.list.firstWhere((element) => element['id']== newVal));
 //         },
 //       ),
 //     );
 //   }
 // }
+const _url = 'https://flutter.dev';
+
+class Testpage extends StatefulWidget {
+  const Testpage({Key? key}) : super(key: key);
+
+  @override
+  _TestpageState createState() => _TestpageState();
+}
+
+class _TestpageState extends State<Testpage> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Material(
+        child: Center(
+          child: RaisedButton(
+            onPressed: _launchURL,
+            child: Text('Show Flutter homepage'),
+          ),
+        ),
+      ),
+    );
+
+  }}
+void _launchURL() async =>
+    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';

@@ -91,9 +91,6 @@ class TransRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var  catName = budget.category.list.firstWhere((element) => element['id'] == index, orElse:()=>'null');
-    // if(catName != null) catName = catName['name'];
-    // else catName = 'Null';
 
     getName(List list, int id){
       for (var c in list){

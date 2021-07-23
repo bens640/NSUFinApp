@@ -1,11 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nsu_financial_app/models/budget.dart';
+import 'package:nsu_financial_app/models/category.dart';
 import 'package:nsu_financial_app/models/loan.dart';
 import 'package:nsu_financial_app/notifiers/budget_notifier.dart';
 import 'package:nsu_financial_app/notifiers/general_notifiers.dart';
 import 'package:nsu_financial_app/notifiers/loan_notifier.dart';
+import 'package:nsu_financial_app/notifiers/transaction_notifier.dart';
 
 import '../network_requests.dart';
+
+final transProvider = ChangeNotifierProvider<TransactionNotifier>((ref) {
+  var currentTransaction = Transaction(amount:0, id: 0, transactionDate: DateTime.now(), description: '', budget: 0, category: 0,);
+  int categoryID = 0;
+  return TransactionNotifier(currentTransaction);
+});
+
+
 
 final budgetProvider = ChangeNotifierProvider<BudgetNotifier>((ref) {
   Budget curBudget = Budget(user: 0, transactions: [], balance: 0);
@@ -28,3 +38,11 @@ final futureBudgetProvider = FutureProvider<List<dynamic>>((ref) async {
   int sel = 1;
   return [x, sel];
 });
+//Provider that returns [the list of transaction categories from API, current selection for dropdown list]
+final futureCategoriesListProvider = FutureProvider<List<dynamic>>((ref) async {
+  CategoryList x = await fetchCategories();
+  int sel = 1;
+  return [x, sel];
+});
+//Provider for category choice when user adds or updates a transaction in budget
+final categoryChoiceProvider = StateProvider((ref) => 0);

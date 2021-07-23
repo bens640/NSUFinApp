@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nsu_financial_app/main.dart';
 import 'package:nsu_financial_app/screens/budget_screens/budget_screen.dart';
 import 'package:nsu_financial_app/screens/loan_screens/LoanScreen.dart';
+import 'package:nsu_financial_app/screens/test_page.dart';
 import 'package:nsu_financial_app/widgets/appBar_widget.dart';
 import 'package:nsu_financial_app/widgets/home_screen_menu_widget.dart';
 import 'package:nsu_financial_app/screens/document_screens/document_screen.dart';
@@ -26,7 +27,7 @@ class HomeScreen extends ConsumerWidget {
         routes: {
           '/home': (context) => HomeScreen(loggedIn: currentSession.loggedIn),
           '/loan': (context) => LoanScreen(),
-          '/docs': (context) => MyApp2(),
+          '/docs': (context) => DocumentScreen(),
           '/RssScreen': (context) => RssScreen(),
           '/budget': (context) => BudgetScreen(),
           '/login': (context) => LoginPage(),

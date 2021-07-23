@@ -10,6 +10,7 @@ import 'package:nsu_financial_app/notifiers/general_notifiers.dart';
 import 'package:nsu_financial_app/notifiers/loan_notifier.dart';
 import 'package:nsu_financial_app/screens/budget_screens/add_trans_screen.dart';
 import 'package:nsu_financial_app/screens/budget_screens/budget_screen.dart';
+import 'package:nsu_financial_app/screens/rss_screens/rss_screen.dart';
 import 'package:nsu_financial_app/screens/test_page.dart';
 import 'package:nsu_financial_app/screens/document_screens/document_screen.dart';
 
@@ -73,13 +74,15 @@ class MyApp extends ConsumerWidget {
 
     return ProviderScope(
       child: MaterialApp(
-        initialRoute: '/',
+        initialRoute: '/home',
         routes: {
-          '/home': (context) => HomeScreen(loggedIn: currentSession.loggedIn,),
+          '/home': (context) => HomeScreen(loggedIn: currentSession.loggedIn),
           '/loan': (context) => LoanScreen(),
-          '/docs': (context) => MyApp2(),
+          '/docs': (context) => DocumentScreen(),
+          '/RssScreen': (context) => RssScreen(),
           '/budget': (context) => BudgetScreen(),
-          '/login': (context) => LoginPage()
+          '/login': (context) => LoginPage(),
+
         },
         title: 'NSU Financial App',
         debugShowCheckedModeBanner: false,
@@ -88,12 +91,11 @@ class MyApp extends ConsumerWidget {
           scaffoldBackgroundColor: Color.fromRGBO(176, 212, 232, 1)
         ),
         home: Scaffold(
+          bottomNavigationBar: BottomAppBar(child: Text('HG'),),
           appBar: BaseAppBar(
             // title: Text('NSU Fin'),
             // appBar: AppBar(),
-
       ),
-
           body: HomeScreen(loggedIn: loggedIn),
           // body: HomeScreen(loggedIn: currentSession.loggedIn),
         ),

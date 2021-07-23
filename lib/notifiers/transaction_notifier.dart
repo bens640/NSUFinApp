@@ -18,7 +18,7 @@ class TransactionNotifier extends ChangeNotifier {
   trans.description = descriptionController.text;
   trans.amount = totalAmount;
   trans.transactionDate =  transactionDateController ;
-  trans.category = int.parse(categoryController.text);
+  // trans.category = int.parse(categoryController.text);
   notifyListeners();
   }
 

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:nsu_financial_app/main.dart';
 import 'package:nsu_financial_app/providers/providers.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoanShortDetail extends ConsumerWidget{
 
@@ -10,6 +11,21 @@ class LoanShortDetail extends ConsumerWidget{
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final currentLoan = watch(loanProvider);
+    final String _studentLoanRateLink = 'https://studentloanhero.com/marketplace/private-student-loans';
+    Future<void> _launchInWebViewOrVC(String url) async {
+      if (await canLaunch(url)) {
+        await launch(
+          url,
+          forceSafariVC: true,
+          forceWebView: true,
+          enableJavaScript: true,
+          headers: <String, String>{'my_header_key': 'my_header_value'},
+        );
+      } else {
+        throw 'Could not launch $url';
+      }
+    }
+    Future<void>? _launched;
     return Container(
       child: Column(
         children: [
@@ -41,6 +57,12 @@ class LoanShortDetail extends ConsumerWidget{
 
             ],
           ),
+          SizedBox(height: 50,),
+          ElevatedButton(
+              onPressed: ()=>
+                _launched = _launchInWebViewOrVC(_studentLoanRateLink),
+
+              child: Text('Find Student Loan Rates')),
           SizedBox(height: 50,),
           Column(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

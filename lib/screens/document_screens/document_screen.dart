@@ -25,14 +25,14 @@ import '../../network_requests.dart';
 //   return parsed.map<Document>((json) => Document.fromJson(json)).toList();
 // }
 
-class MyApp2 extends StatefulWidget {
-  MyApp2({Key? key}) : super(key: key);
+class DocumentScreen extends StatefulWidget {
+  DocumentScreen({Key? key}) : super(key: key);
 
   @override
-  _MyApp2State createState() => _MyApp2State();
+  _DocumentScreenState createState() => _DocumentScreenState();
 }
 
-class _MyApp2State extends State<MyApp2> {
+class _DocumentScreenState extends State<DocumentScreen> {
   @override
   void initState() {
     super.initState();
@@ -87,24 +87,23 @@ class DocumentList extends StatelessWidget {
             itemCount: documents.length,
             itemBuilder: (context, index) {
               return ExpansionTile(
+                expandedAlignment: Alignment.center,
                 title: Text(documents[index].title),
                 children: [
                   // Text(documents[index].link),
-                  SingleChildScrollView(
-                    child: Container(
-                      height: screenHeight * .80,
-                      child: documents[index].type == 'PDF'
-                          ? SfPdfViewer.network(
-                          documents[index].link,
-                      canShowScrollHead: true,
-                      canShowPaginationDialog: false,)
-                          : InteractiveViewer(
-                        panEnabled: true,
+                  Container(
+                    height: screenHeight * .80,
+                    child: documents[index].type == 'PDF'
+                        ? SfPdfViewer.network(
+                        documents[index].link,
+                    canShowScrollHead: true,
+                    canShowPaginationDialog: false,)
+                        : InteractiveViewer(
+                      panEnabled: true,
 
-                              child: WebView(initialUrl: documents[index].link)),
+                            child: WebView(initialUrl: documents[index].link, )),
 
-                      // child:Text(documents[index].link)
-                    ),
+                    // child:Text(documents[index].link)
                   ),
                 ],
               );

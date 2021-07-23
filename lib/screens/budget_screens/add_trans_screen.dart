@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 
 import 'package:nsu_financial_app/models/category.dart';
 import 'package:nsu_financial_app/notifiers/category_notifier.dart';
+import 'package:nsu_financial_app/providers/providers.dart';
 import 'package:nsu_financial_app/screens/budget_screens/budget_screen.dart';
+import 'package:nsu_financial_app/widgets/category_dropdown_list_widget.dart';
 import 'package:numeric_keyboard/numeric_keyboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,10 +16,6 @@ import 'package:http/http.dart' as http;
 import 'package:nsu_financial_app/notifiers/transaction_notifier.dart';
 import '../../main.dart';
 
-final transProvider = ChangeNotifierProvider<TransactionNotifier>((ref) {
-  var currentTransaction = Transaction(amount:0, id: 0, transactionDate: DateTime.now(), description: '', budget: 0, category: 0,);
-  return TransactionNotifier(currentTransaction);
-});
 
 
 
@@ -78,6 +76,7 @@ class AddOrEditTransaction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final currentTrans = watch(transProvider);
+    final futureCategoriesList = watch(futureCategoriesListProvider);
     //If isAdd is false, then initialize all controllers and notifiers to Transaction object that is being edited
     if (isAdd){
       // currentTrans.totalAmount = t.amount;
@@ -167,14 +166,19 @@ class AddOrEditTransaction extends ConsumerWidget {
             thickness: 2,
             height: 0,
           ),
-          TextField(
-            controller: currentTrans.categoryController,
-            textAlign: TextAlign.center,
-            decoration: InputDecoration(
-                hintStyle: TextStyle(color: Colors.blue),
-                hintText: "Category"
-            ),
-          ),
+        futureCategoriesList.when(
+            data: (data) => CategoryListDropdown(catList: data[0], index: data[1]),
+            loading: ()=>CircularProgressIndicator(),
+            error: (d, s) => Text(s.toString())),
+
+          // TextField(
+          //   controller: currentTrans.categoryController,
+          //   textAlign: TextAlign.center,
+          //   decoration: InputDecoration(
+          //       hintStyle: TextStyle(color: Colors.blue),
+          //       hintText: "Category"
+          //   ),
+          // ),
           Divider(
             thickness: 2,
             height: 0,
@@ -209,6 +213,7 @@ class AddOrEditTransaction extends ConsumerWidget {
             },
             rightIcon: Icon(Icons.arrow_forward_sharp),
             rightButtonFn: (){
+                currentTrans.trans.category = context.read(categoryChoiceProvider).state;
                 currentTrans.addTrans();
               isAdd ? postTrans(currentTrans.trans): putTrans(currentTrans.trans);
               currentTrans.reset();
