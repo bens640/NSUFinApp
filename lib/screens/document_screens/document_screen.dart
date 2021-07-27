@@ -12,18 +12,7 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../../main.dart';
 import '../../network_requests.dart';
 
-//
-// Future<List<Document>> fetchDocument(http.Client client) async {
-//   final response = await client
-//       .get(Uri.parse(SERVER_IP+'/document'));
-//
-//   return compute(parseDocuments, response.body);
-// }
-// List<Document> parseDocuments(String responseBody) {
-//   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
-//
-//   return parsed.map<Document>((json) => Document.fromJson(json)).toList();
-// }
+
 
 class DocumentScreen extends StatefulWidget {
   DocumentScreen({Key? key}) : super(key: key);
@@ -75,12 +64,15 @@ class DocumentList extends StatelessWidget {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Colors.blue,
+                Color.fromRGBO(10, 36, 99,1),
                 Colors.white,
               ],
             )),
           ),
-          Center(child: Text('NSU Documents'))
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
+            child: Center(child: Text('NSU Documents')),
+          )
         ]),
         Expanded(
           child: ListView.builder(

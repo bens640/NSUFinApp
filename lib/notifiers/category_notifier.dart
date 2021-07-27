@@ -1,22 +1,8 @@
-//
-// part of 'providers.dart';
-//
-// class JokesNotifier extends StateNotifier<JokesState> {
-//   JokesNotifier({
-//     required IJokesRepository jokesRepository,
-//   })   : _jokesRepository = jokesRepository,
-//         super(const JokesState.initial());
-//
-//   final IJokesRepository _jokesRepository;
-//
-//   Future<void> getJoke() async {
-//     state = const JokesState.loading();
-//
-//     try {
-//       final joke = await _jokesRepository.getJoke();
-//       state = JokesState.data(joke: joke);
-//     } catch (_) {
-//       state = JokesState.error('Error!');
-//     }
-//   }
-// }
+import 'package:flutter/material.dart';
+import 'package:nsu_financial_app/models/budget.dart';
+import 'package:nsu_financial_app/models/category.dart';
+
+class CategoryNotifier extends ChangeNotifier {
+  TransCategory category = TransCategory(id: 0, isIncome: false, isParent: false, name: '');
+
+}

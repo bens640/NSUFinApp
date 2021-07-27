@@ -38,6 +38,7 @@ Future<int> attemptSignUp(String username, String password) async {
 Future<Budget> fetchBudget() async {
   dynamic jwt = await storage.read(key: 'jwt');
   dynamic id = await storage.read(key: 'id');
+  print(id);
   final response =
   await http.get(Uri.parse(SERVER_IP + '/budget/' + id), headers: {
     'Content-Type': 'application/json',
@@ -88,7 +89,6 @@ Future fetchCategories() async {
     // If the server did return a 200 OK response,
     // then parse the JSON.
     // print(responseJson);
-    print('**********' + responseJson.toString());
     // return CategoryList.fromJson(responseJson);
     return CategoryList(list: responseJson);
   } else {
@@ -127,4 +127,29 @@ List<Document> parseDocuments(String responseBody) {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
 
   return parsed.map<Document>((json) => Document.fromJson(json)).toList();
+}
+
+
+Future postCategory( TransCategory cat) async {
+  dynamic jwt = await storage.read(key: 'jwt');
+  dynamic id = await storage.read(key: 'id');
+  int idInt = int.parse(id);
+
+  var data = cat.toJson();
+  print(data);
+  final response = await http.post(Uri.parse(SERVER_IP+'/category/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Token: '+ jwt,
+      },
+      body: jsonEncode(data)
+
+
+  );
+  if(response.statusCode == 200)
+    print(response.body);
+  return response.body;
+
+
 }

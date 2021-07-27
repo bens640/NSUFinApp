@@ -10,11 +10,15 @@ class Budget {
     required this.user,
     required this.transactions,
     required this.balance
-  });
+  }):
+  _totals ={},
+  budgetTotals = [];
 
   int user;
   double balance = 0;
+  Map<int, double> _totals;
   List<Transaction> transactions;
+  List<BudgetTotalData> budgetTotals;
 
   factory Budget.fromJson(Map<String, dynamic> json) => Budget(
     user: json["user"],
@@ -27,6 +31,17 @@ class Budget {
     // 'balance': balance,
     "transactions": List<dynamic>.from(transactions.map((x) => x.toJson(this.user))),
   };
+   getTotals(){
+    for (Transaction t in transactions){
+      if (_totals[t.category] == null) _totals[t.category] = t.amount;
+      else _totals[t.category] = (_totals[t.category]! + t.amount)!;
+    }
+    _totals.forEach((key, value) {budgetTotals.add(BudgetTotalData(key, value)); });
+    print(_totals);
+
+  }
+
+
 }
 
 class Transaction {
@@ -65,7 +80,13 @@ class Transaction {
     "category": category,
   };
 
-  getAmount(){
-    return amount;
-  }
+
+
+
+}
+
+class BudgetTotalData{
+  final int category;
+  final double amount;
+  BudgetTotalData(this.category, this.amount);
 }

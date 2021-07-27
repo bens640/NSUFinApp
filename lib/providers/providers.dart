@@ -3,6 +3,7 @@ import 'package:nsu_financial_app/models/budget.dart';
 import 'package:nsu_financial_app/models/category.dart';
 import 'package:nsu_financial_app/models/loan.dart';
 import 'package:nsu_financial_app/notifiers/budget_notifier.dart';
+import 'package:nsu_financial_app/notifiers/category_notifier.dart';
 import 'package:nsu_financial_app/notifiers/general_notifiers.dart';
 import 'package:nsu_financial_app/notifiers/loan_notifier.dart';
 import 'package:nsu_financial_app/notifiers/transaction_notifier.dart';
@@ -35,6 +36,7 @@ final loanProvider = ChangeNotifierProvider<LoanChangeNotifier>((ref) {
 
 final futureBudgetProvider = FutureProvider<List<dynamic>>((ref) async {
   BudgetScreenModel x = await setBudgetAndCategories();
+  x.budget.getTotals();
   int sel = 1;
   return [x, sel];
 });
@@ -46,3 +48,12 @@ final futureCategoriesListProvider = FutureProvider<List<dynamic>>((ref) async {
 });
 //Provider for category choice when user adds or updates a transaction in budget
 final categoryChoiceProvider = StateProvider((ref) => 0);
+
+final newCategoryProvider = ChangeNotifierProvider<CategoryNotifier>((ref) {
+  return CategoryNotifier();
+});
+
+// final loggedInProvider =
+// StateNotifierProvider<LoggedInNotifier, bool>((ref) {
+//   return LoggedInNotifier();
+// });

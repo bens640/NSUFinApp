@@ -3,8 +3,8 @@ import 'package:nsu_financial_app/models/budget.dart';
 
 class TransactionNotifier extends ChangeNotifier {
 
-  late Transaction trans;
-  TransactionNotifier(this.trans);
+  late Transaction transaction;
+  TransactionNotifier(this.transaction);
   var descriptionController = TextEditingController();
   DateTime transactionDateController = DateTime.now();
   var budget = 0;
@@ -15,10 +15,9 @@ class TransactionNotifier extends ChangeNotifier {
 
 
   addTrans(){
-  trans.description = descriptionController.text;
-  trans.amount = totalAmount;
-  trans.transactionDate =  transactionDateController ;
-  // trans.category = int.parse(categoryController.text);
+  // transaction.description = descriptionController.text;
+  transaction.amount = totalAmount;
+  transaction.transactionDate =  transactionDateController ;
   notifyListeners();
   }
 
@@ -36,9 +35,8 @@ class TransactionNotifier extends ChangeNotifier {
     // totalAmount = 0;
     // tempAmount = 0;
 
-    // trans = new Transaction(id: 0, description: '', amount: totalAmount, transactionDate: DateTime.now(), budget: budget, category: 0);
 
-    // notifyListeners();
+    notifyListeners();
   }
   backSpace(){
     if(tempAmount > 0){
@@ -58,14 +56,14 @@ class TransactionNotifier extends ChangeNotifier {
     totalAmount = 0;
     tempAmount = 0;
 
-    trans = new Transaction(id: 0, description: '', amount: totalAmount, transactionDate: DateTime.now(), budget: budget, category: 0);
+    transaction = new Transaction(id: 0, description: '', amount: totalAmount, transactionDate: DateTime.now(), budget: budget, category: 0);
 
     notifyListeners();
   }
 
   setDate(DateTime entry){
     transactionDateController = entry;
-    trans.transactionDate = entry;
+    transaction.transactionDate = entry;
     notifyListeners();
   }
 

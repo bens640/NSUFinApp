@@ -11,6 +11,7 @@ import 'package:nsu_financial_app/notifiers/budget_notifier.dart';
 import 'package:nsu_financial_app/notifiers/category_notifier.dart';
 import 'package:nsu_financial_app/providers/providers.dart';
 import 'package:nsu_financial_app/widgets/budget_widgets/transaction_widget.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../main.dart';
 import 'dart:async';
 
@@ -22,72 +23,12 @@ class BudgetScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    // String tk = '';
-    // getToken().then((value) => tk = value);
-    // var curBudget = watch(budgetProvider);
-    // final currentSession = watch(curSession);
+    var loggedIn = watch(loggedInProvider);
     final futureBudget = watch(futureBudgetProvider);
-    return Scaffold(
+    return  Scaffold(
       body:
-          // FutureBuilder(
-          //     future: (fetchBudget()),
-          //     builder: (context, snapshot) {
-          //       print(snapshot);
-          //       if (snapshot.hasData) print(snapshot);
-          //       if (snapshot.hasData)
-          //         curBudget.budget = snapshot.data as Budget;
-          //       if (snapshot.hasError) print(snapshot.error);
-          //       if (snapshot.hasData) {
-          //         return ListView(
-          //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-          //             children: [
-          //               Column(
-          //                 children: [
-          //                   Text(
-          //                     'Budget Tracker',
-          //                     style: TextStyle(fontSize: 25),
-          //                   ),
-          //                   Text(
-          //                     "Current Balance",
-          //                     style: TextStyle(fontSize: 19),
-          //                   ),
-          //                   Text(
-          //                     NumberFormat.currency(symbol: '\$')
-          //                         .format(curBudget.budget.balance),
-          //                     style: TextStyle(
-          //                         fontSize: 21, fontWeight: FontWeight.bold),
-          //                   ),
-          //                   Text('Transactions'),
-          //                   ElevatedButton(
-          //                       onPressed: () => {
-          //
-          //                             Navigator.push(
-          //                                 context,
-          //                                 MaterialPageRoute(
-          //                                   builder: (context) =>
-          //                                       AddOrEditTransaction(
-          //                                         t: Transaction(description: '', category: 0, amount: 0, budget: 0, id: 0, transactionDate: DateTime.now()),
-          //                                         isAdd: true,
-          //                                   ),
-          //                                 ))
-          //                           },
-          //                       child: Text('Add')),
-          //                   Container(
-          //                       height: 500,
-          //                       child: TransactionsWidget(curBudget.budget))
-          //                 ],
-          //               ),
-          //             ]);
-          //       } else {
-          //         return Center(child: CircularProgressIndicator());
-          //       }
-          //     } //builder
-          //     ),
-
-
-
-
-      futureBudget.when(
+      // !loggedIn ? Container() :
+        futureBudget.when(
           data: (d) =>
               ListView(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -108,7 +49,25 @@ class BudgetScreen extends ConsumerWidget {
                   style: TextStyle(
                       fontSize: 21, fontWeight: FontWeight.bold),
                 ),
-                Text('Transactions'),
+                SfCircularChart(
+                  // legend: Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap, ),
+                  series: <CircularSeries>[
+                    PieSeries<BudgetTotalData, int>(
+                      dataSource: d[0].budget.budgetTotals,
+                      xValueMapper: (BudgetTotalData data,_)=> data.category,
+                      yValueMapper: (BudgetTotalData data,_)=> data.amount,
+                      explode: true,
+                      dataLabelSettings: DataLabelSettings(isVisible: true),
+                      dataLabelMapper: (BudgetTotalData data, _) => '${d[0].category.list[data.category-1]['name']} - \$${data.amount }',
+                      enableTooltip: true,
+                      enableSmartLabels: true,
+
+                    )
+                  ],
+                ),
+                Text('Transactions', style: TextStyle(
+                  fontSize: 20
+                ),),
                 ElevatedButton(
                     onPressed: () => {
 
@@ -130,65 +89,12 @@ class BudgetScreen extends ConsumerWidget {
               ),
           ]),
           loading: () => CircularProgressIndicator(),
-          error: (d, s) => Text(s.toString())),
-
-
-      // FutureBuilder(
-      //     future: (fetchBudget()),
-      //     builder: (context, snapshot) {
-      //       print(snapshot);
-      //       if (snapshot.hasData) print(snapshot);
-      //       if (snapshot.hasData)
-      //         curBudget.budget = snapshot.data as Budget;
-      //       if (snapshot.hasError) print(snapshot.error);
-      //       if (snapshot.hasData) {
-      //         return ListView(
-      //             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-      //             children: [
-      //               Column(
-      //                 children: [
-      //                   Text(
-      //                     'Budget Tracker',
-      //                     style: TextStyle(fontSize: 25),
-      //                   ),
-      //                   Text(
-      //                     "Current Balance",
-      //                     style: TextStyle(fontSize: 19),
-      //                   ),
-      //                   Text(
-      //                     NumberFormat.currency(symbol: '\$')
-      //                         .format(curBudget.budget.balance),
-      //                     style: TextStyle(
-      //                         fontSize: 21, fontWeight: FontWeight.bold),
-      //                   ),
-      //                   Text('Transactions'),
-      //                   ElevatedButton(
-      //                       onPressed: () => {
-      //
-      //                         Navigator.push(
-      //                             context,
-      //                             MaterialPageRoute(
-      //                               builder: (context) =>
-      //                                   AddOrEditTransaction(
-      //                                     t: Transaction(description: '', category: 0, amount: 0, budget: 0, id: 0, transactionDate: DateTime.now()),
-      //                                     isAdd: true,
-      //                                   ),
-      //                             ))
-      //                       },
-      //                       child: Text('Add')),
-      //                   Container(
-      //                       height: 500,
-      //                       child: TransactionsWidget(curBudget.budget))
-      //                 ],
-      //               ),
-      //             ]);
-      //       } else {
-      //         return Center(child: CircularProgressIndicator());
-      //       }
-      //     } //builder
-      // ),
-
-
+          error: (d, s) => Column(
+            children: [
+              Center(child: Text(d.toString())),
+              Center(child: Text(s.toString())),
+            ],
+          )),
 
 
 

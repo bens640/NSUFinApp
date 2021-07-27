@@ -4,6 +4,7 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:intl/intl.dart';
 
 import 'package:nsu_financial_app/models/category.dart';
+import 'package:nsu_financial_app/network_requests.dart';
 import 'package:nsu_financial_app/notifiers/category_notifier.dart';
 import 'package:nsu_financial_app/providers/providers.dart';
 import 'package:nsu_financial_app/screens/budget_screens/budget_screen.dart';
@@ -17,6 +18,29 @@ import 'package:nsu_financial_app/notifiers/transaction_notifier.dart';
 import '../../main.dart';
 
 
+Future postCategory( TransCategory cat) async {
+  dynamic jwt = await storage.read(key: 'jwt');
+  dynamic id = await storage.read(key: 'id');
+  int idInt = int.parse(id);
+
+  var data = cat.toJson();
+  print(data);
+  final response = await http.post(Uri.parse(SERVER_IP+'/category/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Token: '+ jwt,
+      },
+      body: jsonEncode(data)
+
+
+  );
+  if(response.statusCode == 200)
+    print(response.body);
+  return response.body;
+
+
+}
 
 
 
@@ -75,23 +99,23 @@ class AddOrEditTransaction extends ConsumerWidget {
   AddOrEditTransaction({required this.isAdd, required this.t,} );
   @override
   Widget build(BuildContext context, ScopedReader watch) {
+    final descriptionController = TextEditingController();
     final currentTrans = watch(transProvider);
     final futureCategoriesList = watch(futureCategoriesListProvider);
+    final futureBudget = watch(futureBudgetProvider);
     //If isAdd is false, then initialize all controllers and notifiers to Transaction object that is being edited
     if (isAdd){
       // currentTrans.totalAmount = t.amount;
       currentTrans.resetNotifier();
     }
     else{
-      currentTrans.descriptionController.text = t.description;
-      currentTrans.categoryController.text = t.category.toString();
-      // currentTrans.amount = t.amount;
+      // descriptionController.text = t.description;
+      // currentTrans.descriptionController.text = t.description;
+      // currentTrans.categoryController.text = t.category.toString();
       currentTrans.totalAmount = t.amount;
       currentTrans.transactionDateController = t.transactionDate;
-      currentTrans.trans = t;
+      // currentTrans.transaction = t;
     }
-    // New Object if addTrans is true, else passed in argument
-    // if (isAdd)currentTrans.trans = t;
 
     _onKeyboardTap(String value) {
       var _newValue = int.parse(value);
@@ -154,8 +178,9 @@ class AddOrEditTransaction extends ConsumerWidget {
             height: 0,
           ),
           TextField(
+            controller: descriptionController,
 
-            controller: currentTrans.descriptionController,
+            // controller: currentTrans.descriptionController,
             textAlign: TextAlign.center,
             decoration: InputDecoration(
                 hintStyle: TextStyle(color: Colors.blue),
@@ -166,19 +191,19 @@ class AddOrEditTransaction extends ConsumerWidget {
             thickness: 2,
             height: 0,
           ),
-        futureCategoriesList.when(
-            data: (data) => CategoryListDropdown(catList: data[0], index: data[1]),
-            loading: ()=>CircularProgressIndicator(),
-            error: (d, s) => Text(s.toString())),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            futureCategoriesList.when(
+                data: (data) => CategoryListDropdown(catList: data[0], index: data[1]),
+                loading: ()=>CircularProgressIndicator(),
+                error: (d, s) => Text(s.toString())),
+            ElevatedButton(onPressed: ()=>{},
+                child: Icon(Icons.add_rounded)),
 
-          // TextField(
-          //   controller: currentTrans.categoryController,
-          //   textAlign: TextAlign.center,
-          //   decoration: InputDecoration(
-          //       hintStyle: TextStyle(color: Colors.blue),
-          //       hintText: "Category"
-          //   ),
-          // ),
+          ],
+        ),
+
           Divider(
             thickness: 2,
             height: 0,
@@ -194,9 +219,7 @@ class AddOrEditTransaction extends ConsumerWidget {
                   },
                       child: Icon(Icons.date_range)),
                   Text(DateFormat.yMMMd().format(currentTrans.transactionDateController)),
-                  ElevatedButton(onPressed: ()=>{},
-                      child: Icon(Icons.add_rounded)),
-                ],
+]
               )),
           Divider(
             thickness: 2,
@@ -213,9 +236,11 @@ class AddOrEditTransaction extends ConsumerWidget {
             },
             rightIcon: Icon(Icons.arrow_forward_sharp),
             rightButtonFn: (){
-                currentTrans.trans.category = context.read(categoryChoiceProvider).state;
+                fetchBudget();
+                currentTrans.transaction.description = descriptionController.text;
+                currentTrans.transaction.category = context.read(categoryChoiceProvider).state;
                 currentTrans.addTrans();
-              isAdd ? postTrans(currentTrans.trans): putTrans(currentTrans.trans);
+              isAdd ? postTrans(currentTrans.transaction): putTrans(currentTrans.transaction);
               currentTrans.reset();
                 Navigator.push(
                   context,

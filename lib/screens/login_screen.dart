@@ -20,36 +20,12 @@ class LoginPage extends ConsumerWidget {
         ),
   );
 
-  // Future attemptLogIn(String username, String password) async {
-  //   var res = await http.post(
-  //       Uri.parse(SERVER_IP+'/login/'),
-  //       body: {
-  //         "username": username,
-  //         "password": password
-  //       }
-  //   );
-  //   if(res.statusCode == 200) return res.body;
-  //   return null;
-  // }
-
-  // Future<int> attemptSignUp(String username, String password) async {
-  //   var res = await http.post(
-  //       Uri.parse(SERVER_IP+'/signup/'),
-  //       body: {
-  //         "username": username,
-  //         "password": password
-  //       }
-  //   );
-  //   return res.statusCode;
-  //
-  // }
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final currentSession = context.read(curSession);
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        // appBar: AppBar(title: Text("Log In"),),
+        // resizeToAvoidBottomInset: false,
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
@@ -74,18 +50,20 @@ class LoginPage extends ConsumerWidget {
                     var jwt = await attemptLogIn(username, password);
                     if(jwt != null) {
                       Map token = json.decode(jwt);
+
                       String tk = token['token'];
                       String id = token['id'].toString();
                       storage.write(key: "jwt", value: tk);
                       storage.write(key: 'id', value: id.toString());
-                     currentSession.loggedIn = true;
 
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomeScreen(loggedIn: true)
-                          )
-                      );
+                     currentSession.loggedIn = true;
+                      Navigator.of(context).pop();
+                      // Navigator.push(
+                      //     context,
+                      //     MaterialPageRoute(
+                      //         builder: (context) => HomeScreen(loggedIn: true)
+                      //     )
+                      // );
                     } else {
                       displayDialog(context, "An Error Occurred", "No account was found matching that username and password");
                       currentSession.loggedIn = false;

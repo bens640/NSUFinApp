@@ -8,6 +8,7 @@ import 'package:nsu_financial_app/models/category.dart';
 // import 'package:nsu_financial_app/notifiers/category_notifier.dart';
 import 'package:nsu_financial_app/notifiers/general_notifiers.dart';
 import 'package:nsu_financial_app/notifiers/loan_notifier.dart';
+import 'package:nsu_financial_app/screens/budget_screens/add_category_screen.dart';
 import 'package:nsu_financial_app/screens/budget_screens/add_trans_screen.dart';
 import 'package:nsu_financial_app/screens/budget_screens/budget_screen.dart';
 import 'package:nsu_financial_app/screens/rss_screens/rss_screen.dart';
@@ -49,16 +50,9 @@ final curSession = ChangeNotifierProvider<GeneralNotifier>((ref) {
   return GeneralNotifier();
 });
 
-final budgetProvider = ChangeNotifierProvider<BudgetNotifier>((ref) {
-  Budget curBudget = Budget(user: 0, transactions: [], balance: 0);
-  return BudgetNotifier(curBudget);
-});
 
 
-final loggedInProvider =
-StateNotifierProvider<LoggedInNotifier, bool>((ref) {
-  return LoggedInNotifier();
-});
+
 
 
 class MyApp extends ConsumerWidget {
@@ -69,34 +63,31 @@ class MyApp extends ConsumerWidget {
     final currentSession = watch(curSession);
     getToken().then((value) => token.isNotEmpty  ? token = value: 0);
 
-    final loggedIn = watch(loggedInProvider);
+    // final loggedIn = watch(loggedInProvider);
 
 
     return ProviderScope(
       child: MaterialApp(
-        initialRoute: '/home',
         routes: {
           '/home': (context) => HomeScreen(loggedIn: currentSession.loggedIn),
           '/loan': (context) => LoanScreen(),
           '/docs': (context) => DocumentScreen(),
-          '/RssScreen': (context) => RssScreen(),
+          '/RssScreen': (context) => AddTransactionWidget(),
           '/budget': (context) => BudgetScreen(),
           '/login': (context) => LoginPage(),
-
         },
-        title: 'NSU Financial App',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: Color.fromRGBO(10, 36, 99,1),
           scaffoldBackgroundColor: Color.fromRGBO(176, 212, 232, 1)
         ),
         home: Scaffold(
-          bottomNavigationBar: BottomAppBar(child: Text('HG'),),
+          // bottomNavigationBar: BottomAppBar(child: Text('HG'),),
           appBar: BaseAppBar(
             // title: Text('NSU Fin'),
             // appBar: AppBar(),
       ),
-          body: HomeScreen(loggedIn: loggedIn),
+          body: Container(child: HomeScreen(loggedIn: false)),
           // body: HomeScreen(loggedIn: currentSession.loggedIn),
         ),
       ),
