@@ -41,6 +41,7 @@ class _CategoryListState extends State<CategoryListDropdown> {
               // d.intSelection = newVal;
               widget.index = newVal;
               context.read(categoryChoiceProvider).state = newVal;
+              print('******asdsad********************'+context.read(categoryChoiceProvider).state.toString());
               setState(() {
                 dropdownValue = newVal;
               });

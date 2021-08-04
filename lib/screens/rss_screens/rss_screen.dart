@@ -2,6 +2,8 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:nsu_financial_app/models/rss.dart';
+import 'package:nsu_financial_app/widgets/appBar_widget.dart';
+import 'package:nsu_financial_app/widgets/bottom_app_bar_widget.dart';
 import 'package:webfeed/domain/rss_feed.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -32,8 +34,10 @@ class _RssScreenState extends State<RssScreen> {
   Widget build(BuildContext context) {
     Future<void>? _launched;
 
-    return MaterialApp(
-      home: Scaffold(
+    return
+       Scaffold(
+        appBar: BaseAppBar(),
+         bottomNavigationBar: BottomBaseBar(),
         body: Container(
           child: FutureBuilder(
             future: fetchNews(),
@@ -74,7 +78,7 @@ class _RssScreenState extends State<RssScreen> {
             },
           ),
         ),
-      ),
+
     );
   }
 

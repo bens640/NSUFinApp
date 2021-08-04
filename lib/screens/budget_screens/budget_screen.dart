@@ -1,21 +1,13 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:nsu_financial_app/models/budget.dart';
-import 'package:http/http.dart' as http;
-import 'package:nsu_financial_app/models/category.dart';
-import 'package:nsu_financial_app/notifiers/budget_notifier.dart';
-import 'package:nsu_financial_app/notifiers/category_notifier.dart';
 import 'package:nsu_financial_app/providers/providers.dart';
+import 'package:nsu_financial_app/widgets/appBar_widget.dart';
+import 'package:nsu_financial_app/widgets/bottom_app_bar_widget.dart';
 import 'package:nsu_financial_app/widgets/budget_widgets/transaction_widget.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import '../../main.dart';
-import 'dart:async';
-
-import '../../network_requests.dart';
 import 'add_trans_screen.dart';
 
 class BudgetScreen extends ConsumerWidget {
@@ -25,11 +17,24 @@ class BudgetScreen extends ConsumerWidget {
   Widget build(BuildContext context, ScopedReader watch) {
     var loggedIn = watch(loggedInProvider);
     final futureBudget = watch(futureBudgetProvider);
+    final apiChange = watch(APIChangeProvider);
+
     return  Scaffold(
+      appBar: BaseAppBar(),
+      bottomNavigationBar: BottomBaseBar(),
       body:
-      // !loggedIn ? Container() :
+      !loggedIn.loggedIn ? Center(
+
+        child: Text('Please login to use this feature',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+          fontSize: 30
+        ),
+        ),
+      ) :
         futureBudget.when(
           data: (d) =>
+
               ListView(
           padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
           children: [
@@ -50,7 +55,6 @@ class BudgetScreen extends ConsumerWidget {
                       fontSize: 21, fontWeight: FontWeight.bold),
                 ),
                 SfCircularChart(
-                  // legend: Legend(isVisible: true, overflowMode: LegendItemOverflowMode.wrap, ),
                   series: <CircularSeries>[
                     PieSeries<BudgetTotalData, int>(
                       dataSource: d[0].budget.budgetTotals,
@@ -65,7 +69,8 @@ class BudgetScreen extends ConsumerWidget {
                     )
                   ],
                 ),
-                Text('Transactions', style: TextStyle(
+
+                 Text('Transactions', style: TextStyle(
                   fontSize: 20
                 ),),
                 ElevatedButton(
@@ -82,9 +87,11 @@ class BudgetScreen extends ConsumerWidget {
                           ))
                     },
                     child: Text('Add')),
-                Container(
-                    height: 500,
-                    child: TransactionsWidget(d[0], d[0].budget))
+                (d[0].budget.transactions.length >= 1) ? Container(
+                    height: 320,
+                    child: TransactionsWidget(d[0], d[0].budget)
+                ) :
+                    Container()
               ],
               ),
           ]),

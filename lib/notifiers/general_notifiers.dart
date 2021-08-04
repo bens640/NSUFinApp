@@ -7,12 +7,25 @@ class GeneralNotifier extends ChangeNotifier {
 }
 
 
-class LoggedInNotifier extends StateNotifier<bool>{
-  LoggedInNotifier([bool loggedIn = false]) : super(loggedIn = false);
+class LoggedInNotifier extends ChangeNotifier{
+  Color loggedInColor = Colors.red ;
+  bool loggedIn = false;
 
-  bool get loggedIn => false;
 
   flip(){
-    state = !loggedIn;
+    loggedIn = !loggedIn;
+    notifyListeners();
+  }
+}
+
+
+class APIChangeNotifier extends ChangeNotifier{
+
+  bool changed = false;
+
+
+  flip(){
+    changed = !changed;
+    notifyListeners();
   }
 }

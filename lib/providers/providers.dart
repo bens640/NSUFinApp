@@ -25,8 +25,13 @@ final budgetProvider = ChangeNotifierProvider<BudgetNotifier>((ref) {
 
 
 final loggedInProvider =
-StateNotifierProvider<LoggedInNotifier, bool>((ref) {
+ChangeNotifierProvider<LoggedInNotifier>((ref) {
   return LoggedInNotifier();
+});
+
+final APIChangeProvider =
+ChangeNotifierProvider<APIChangeNotifier>((ref) {
+  return APIChangeNotifier();
 });
 
 final loanProvider = ChangeNotifierProvider<LoanChangeNotifier>((ref) {
@@ -34,14 +39,20 @@ final loanProvider = ChangeNotifierProvider<LoanChangeNotifier>((ref) {
   return LoanChangeNotifier(currentLoan);
 });
 
-final futureBudgetProvider = FutureProvider<List<dynamic>>((ref) async {
-  BudgetScreenModel x = await setBudgetAndCategories();
-  x.budget.getTotals();
+final futureBudgetProvider = FutureProvider.autoDispose<List<dynamic>>((ref) async {
+  ref.maintainState = false;
+  BudgetScreenModel budgetScreenModel = await setBudgetAndCategories();
+  budgetScreenModel.budget.getTotals();
   int sel = 1;
-  return [x, sel];
+  return [budgetScreenModel, sel];
 });
+
+
+
+
+
 //Provider that returns [the list of transaction categories from API, current selection for dropdown list]
-final futureCategoriesListProvider = FutureProvider<List<dynamic>>((ref) async {
+final futureCategoriesListProvider = FutureProvider.autoDispose<List<dynamic>>((ref) async {
   CategoryList x = await fetchCategories();
   int sel = 1;
   return [x, sel];

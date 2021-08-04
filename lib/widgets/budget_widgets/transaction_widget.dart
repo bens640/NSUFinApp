@@ -1,16 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:nsu_financial_app/models/budget.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:http/http.dart' as http;
-import 'package:nsu_financial_app/models/category.dart';
 import 'package:nsu_financial_app/screens/budget_screens/add_trans_screen.dart';
-import 'package:nsu_financial_app/screens/budget_screens/budget_screen.dart';
-import '../../main.dart';
 import '../../network_requests.dart';
-import '../../extensions.dart';
+
 
 
 class TransactionsWidget extends StatelessWidget {
@@ -67,12 +61,11 @@ class TransactionsWidget extends StatelessWidget {
                         backgroundColor: Colors.red,
                         icon: Icons.delete,
                         onPressed: (context) {
+
                           deleteTrans(b.transactions[index].id);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => BudgetScreen()),
-                          );
-                        },
+
+                          Navigator.popAndPushNamed(context, '/budget') ;
+    },
                       ),
                     ],
                   ),
@@ -111,7 +104,7 @@ class TransRow extends StatelessWidget {
       margin: EdgeInsets.fromLTRB(0, 3, 0, 3),
       // color: Colors.blueAccent,
       decoration: BoxDecoration(
-        color: Color.fromRGBO(176, 212, 232, .9),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(5),
         boxShadow: [
           BoxShadow(

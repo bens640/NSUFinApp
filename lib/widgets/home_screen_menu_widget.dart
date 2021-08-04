@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nsu_financial_app/providers/providers.dart';
+import 'package:nsu_financial_app/screens/budget_screens/budget_screen.dart';
+import 'package:nsu_financial_app/screens/document_screens/document_screen.dart';
 import 'package:nsu_financial_app/screens/home_screen.dart';
 import 'package:nsu_financial_app/main.dart';
+import 'package:nsu_financial_app/screens/loan_screens/LoanScreen.dart';
+import 'package:nsu_financial_app/screens/rss_screens/rss_screen.dart';
 
 
 class HomeScreenWidget extends ConsumerWidget {
   //Creates a list of links
-  Map<String, String> naviList = {'Loans': '/loan', 'News':'/RssScreen','Documents': '/docs', 'Budget Tracker': '/budget'};
+  // Map<String, dynamic> naviList = {'Loans': LoanScreen(), 'News':'/RssScreen','Documents': '/docs', 'Budget Tracker': '/budget'};
+  Map<String, dynamic> naviList = {'Loans': LoanScreen(), 'News': RssScreen(),'Documents': DocumentScreen(), 'Budget Tracker': BudgetScreen()};
+
   // dynamic username = await storage.read(key: 'username');
   @override
   Widget build(BuildContext context, ScopedReader watch) {
@@ -47,8 +53,11 @@ class HomeScreenWidget extends ConsumerWidget {
                     child: new InkResponse(
                       child: Text('$key'),
                       onTap: (){
-                        Navigator.pushNamed(context, '${naviList[key]}');
-
+                        // Navigator.pushNamed(context, '${naviList[key]}');
+                        Navigator.push(
+                          context,
+                          new MaterialPageRoute(builder: (ctxt) =>  naviList[key]),
+                        );
                       },
                     ),
                   );

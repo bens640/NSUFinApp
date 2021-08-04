@@ -8,7 +8,6 @@ import 'models/category.dart';
 import 'models/document.dart';
 
 
-
 Future attemptLogIn(String username, String password) async {
   var res = await http.post(
       Uri.parse(SERVER_IP+'/login/'),
@@ -38,14 +37,15 @@ Future<int> attemptSignUp(String username, String password) async {
 Future<Budget> fetchBudget() async {
   dynamic jwt = await storage.read(key: 'jwt');
   dynamic id = await storage.read(key: 'id');
-  print(id);
   final response =
   await http.get(Uri.parse(SERVER_IP + '/budget/' + id), headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
     'Authorization': 'Token ' + jwt,
   });
+
   final responseJson = jsonDecode(response.body);
+  print(id);
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
     // then parse the JSON.
@@ -102,8 +102,7 @@ class BudgetScreenModel{
   Budget budget;
   CategoryList category;
   BudgetScreenModel({required this.budget, required this.category});
-  String selection = 'Food';
-  int intSelection = 3;
+
 
 }
 
@@ -123,6 +122,7 @@ Future<List<Document>> fetchDocument() async {
 
   return compute(parseDocuments, response.body);
 }
+
 List<Document> parseDocuments(String responseBody) {
   final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
 
@@ -138,6 +138,58 @@ Future postCategory( TransCategory cat) async {
   var data = cat.toJson();
   print(data);
   final response = await http.post(Uri.parse(SERVER_IP+'/category/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Token: '+ jwt,
+      },
+      body: jsonEncode(data)
+
+
+  );
+  if(response.statusCode == 200)
+    print(response.body);
+  return response.body;
+
+
+}
+
+
+
+
+
+Future postTrans( Transaction currentTrans) async {
+  dynamic jwt = await storage.read(key: 'jwt');
+  dynamic id = await storage.read(key: 'id');
+  int idInt = int.parse(id);
+
+  var data =currentTrans.toJson(idInt);
+  print(data);
+  final response = await http.post(Uri.parse(SERVER_IP+'/transaction/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Token: '+ jwt,
+      },
+      body: jsonEncode(data)
+
+
+  );
+  if(response.statusCode == 200)
+    print(response.body);
+  return response.body;
+
+
+}
+
+Future putTrans( Transaction currentTrans) async {
+  dynamic jwt = await storage.read(key: 'jwt');
+  dynamic id = await storage.read(key: 'id');
+  int idInt = int.parse(id);
+
+  var data =currentTrans.toJson(idInt);
+  print(data);
+  final response = await http.put(Uri.parse(SERVER_IP+'/transaction/'+currentTrans.id.toString()+'/'),
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',

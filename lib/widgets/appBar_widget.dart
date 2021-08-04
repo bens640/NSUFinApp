@@ -9,7 +9,6 @@ import 'package:nsu_financial_app/providers/providers.dart';
 import '../main.dart';
 
 class BaseAppBar extends ConsumerWidget implements PreferredSizeWidget {
-  // final Color backgroundColor = Colors.red;
   final String title = 'NSU Fin';
   final AppBar appBar = AppBar();
   final List<Widget> widgets = [];
@@ -18,10 +17,10 @@ class BaseAppBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     String token = '';
-    final currentSession = watch(curSession);
+
     var curBudget = watch(budgetProvider);
     var loggedIn = watch(loggedInProvider);
-    // var loggedIn = loggedInProvider;
+
     Future<Null> logout() async {
       await storage.write(key: 'jwt', value: null);
       storage.read(key: 'jwt').then((value) => print(value));
@@ -30,35 +29,28 @@ class BaseAppBar extends ConsumerWidget implements PreferredSizeWidget {
     }
 
     getToken().then((value) => token.isNotEmpty ? token = value : 0);
-    widgets.add(GestureDetector(
+    var accountWidget = GestureDetector(
         onTap: () => {
-              if (loggedIn)
+              if (loggedIn.loggedIn)
                 {
-                  print(loggedIn),
-                  // Navigator.pushNamed(context, '/login'),
                   logout(),
-                  print('just logged-out'),
-                  loggedIn = !loggedIn,
+                  loggedIn.flip(),
                 }
-              else
-                {
-                  Navigator.of(context).pushNamed('/login'),
-                  print('logging in'),
-                  print(loggedIn),
-                  loggedIn = !loggedIn,
-                }
+              else Navigator.of(context).pushNamed('/login'),
             },
         child: Container(
             margin: EdgeInsets.fromLTRB(0, 0, 10, 0),
-            child: loggedIn ? Icon(Icons.account_circle, color: Colors.green,): Icon(Icons.account_circle, color: Colors.red,)
+            child: loggedIn.loggedIn ?
+            Icon(Icons.account_circle, color: Colors.green,  ) :
+            Icon(Icons.account_circle, color: Colors.red,  )
         )
-    )
     );
+
 
     return AppBar(
       title: Text(title),
       // backgroundColor: backgroundColor,
-      actions: widgets,
+      actions:[accountWidget],
     );
   }
 

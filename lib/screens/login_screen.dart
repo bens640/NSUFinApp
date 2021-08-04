@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
+import 'package:nsu_financial_app/providers/providers.dart';
 import 'package:nsu_financial_app/screens/home_screen.dart';
+import 'package:nsu_financial_app/widgets/appBar_widget.dart';
 import '../main.dart';
 import 'dart:convert' show json, base64, ascii;
 
@@ -23,8 +25,10 @@ class LoginPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final currentSession = context.read(curSession);
+
+    var loggedIn = watch(loggedInProvider);
     return Scaffold(
+        appBar: BaseAppBar(),
         // resizeToAvoidBottomInset: false,
         body: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -52,21 +56,17 @@ class LoginPage extends ConsumerWidget {
                       Map token = json.decode(jwt);
 
                       String tk = token['token'];
+
                       String id = token['id'].toString();
                       storage.write(key: "jwt", value: tk);
                       storage.write(key: 'id', value: id.toString());
+                      loggedIn.flip();
 
-                     currentSession.loggedIn = true;
-                      Navigator.of(context).pop();
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => HomeScreen(loggedIn: true)
-                      //     )
-                      // );
+                      Navigator.of(context).pushNamed('/');
+
                     } else {
                       displayDialog(context, "An Error Occurred", "No account was found matching that username and password");
-                      currentSession.loggedIn = false;
+
                     }
                   },
                   child: Text("Log In")
