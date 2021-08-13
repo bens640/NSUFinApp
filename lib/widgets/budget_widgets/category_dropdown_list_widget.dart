@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nsu_financial_app/models/category.dart';
 import 'package:nsu_financial_app/providers/providers.dart';
 
-import '../network_requests.dart';
+import '../../network_requests.dart';
 
 class CategoryListDropdown extends StatefulWidget {
   CategoryListDropdown({Key? key, required this.catList, required this.index}) : super(key: key);

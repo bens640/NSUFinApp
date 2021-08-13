@@ -19,13 +19,3 @@ class LoggedInNotifier extends ChangeNotifier{
 }
 
 
-class APIChangeNotifier extends ChangeNotifier{
-
-  bool changed = false;
-
-
-  flip(){
-    changed = !changed;
-    notifyListeners();
-  }
-}

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:nsu_financial_app/screens/budget_screens/budget_screen.dart';
 import 'package:nsu_financial_app/screens/document_screens/document_screen.dart';
-import 'package:nsu_financial_app/screens/home_screen.dart';
-import 'package:nsu_financial_app/screens/loan_screens/LoanScreen.dart';
+import 'package:nsu_financial_app/screens/home_screens/home_screen.dart';
+import 'package:nsu_financial_app/screens/loan_screens/loan_screen.dart';
 import 'package:nsu_financial_app/screens/rss_screens/rss_screen.dart';
 import 'package:nsu_financial_app/main.dart';
 

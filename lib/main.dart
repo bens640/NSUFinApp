@@ -4,9 +4,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:nsu_financial_app/screens/budget_screens/add_category_screen.dart';
 import 'package:nsu_financial_app/screens/budget_screens/budget_screen.dart';
 import 'package:nsu_financial_app/screens/document_screens/document_screen.dart';
-import 'package:nsu_financial_app/screens/home_screen.dart';
-import 'package:nsu_financial_app/screens/loan_screens/LoanScreen.dart';
-import 'package:nsu_financial_app/screens/login_screen.dart';
+import 'package:nsu_financial_app/screens/home_screens/home_screen.dart';
+import 'package:nsu_financial_app/screens/loan_screens/loan_screen.dart';
+import 'package:nsu_financial_app/screens/login_screen/login_screen.dart';
 
 
 void main() => runApp(ProviderScope(child: MyApp()));

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nsu_financial_app/models/budget.dart';
+import 'package:nsu_financial_app/models/transaction.dart';
 
 class TransactionNotifier extends ChangeNotifier {
 

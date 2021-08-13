@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:nsu_financial_app/providers/providers.dart';
-import 'package:nsu_financial_app/screens/home_screen.dart';
-import 'package:nsu_financial_app/widgets/appBar_widget.dart';
-import '../main.dart';
+import 'package:nsu_financial_app/screens/home_screens/home_screen.dart';
+import 'package:nsu_financial_app/widgets/base_widgets/top_app_bar_widget.dart';
+import '../../main.dart';
 import 'dart:convert' show json, base64, ascii;
 
-import '../network_requests.dart';
+import '../../network_requests.dart';
 
 class LoginPage extends ConsumerWidget {
   final TextEditingController _usernameController = TextEditingController();
@@ -28,12 +28,24 @@ class LoginPage extends ConsumerWidget {
 
     var loggedIn = watch(loggedInProvider);
     return Scaffold(
-        appBar: BaseAppBar(),
+        appBar: TopAppBar(),
         // resizeToAvoidBottomInset: false,
         body: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            children: <Widget>[
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
+                child: Center(
+                  child: Text(
+                    'Login',
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600
+                    ),
+                  ),
+                ),
+              ),
               TextField(
                 controller: _usernameController,
                 decoration: InputDecoration(

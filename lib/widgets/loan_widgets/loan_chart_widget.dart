@@ -9,8 +9,6 @@ import 'package:intl/src/intl/number_format.dart';
 
 import 'loan_table_widget.dart';
 class LoanChart extends ConsumerWidget {
-
-
   @override
   Widget build(BuildContext context, ScopedReader watch) {
     final currentLoan = watch(loanProvider);

@@ -1,34 +1,42 @@
-class Transaction{
+class Transaction {
+  Transaction({
+    required this.id,
+    required this.description,
+    required this.amount,
+    required this.transactionDate,
+    required this.budget,
+    required this.category,
+  });
+
   int id;
   String description;
   double amount;
-  int budgetId;
+  DateTime transactionDate;
+  int budget;
   int category;
-  String transDate;
 
+  factory Transaction.fromJson(Map<String, dynamic> json) => Transaction(
+    id: json["id"],
+    description: json["description"],
+    amount: double.parse(json["amount"]),
+    transactionDate: DateTime.parse(json["transaction_date"]),
+    budget: json["budget"],
+    category: json["category"],
+  );
 
-  Transaction({required this.id, required this.description,required this.amount,
-    required this.budgetId, required this.category,
-    required this.transDate
-    });
+  Map<String, dynamic> toJson(int id) => {
+    "description": description,
+    "amount": amount,
+    "transaction_date":
+    "${transactionDate.year.toString().padLeft(4, '0')}-${transactionDate.month.toString().padLeft(2, '0')}-${transactionDate.day.toString().padLeft(2, '0')}",
+    "budget": id,
+    "category": category,
+  };
+}
+//This model is for the circular chart on the budget page
+class BudgetTotalData {
+  final int category;
+  final double amount;
 
-  factory Transaction.fromJson(Map<String, dynamic> json) {
-    return Transaction(
-      description: json['description'],
-      amount: json['amount'],
-      budgetId: json['budget'],
-      id: json['id'],
-      transDate: json['transDate'],
-      category: json['category'],
-
-    );
-  }
-  Map<String, dynamic> toJson()=>
-      {
-        "description": description,
-        "amount": amount,
-        "transaction_date": transDate,
-        "budget": budgetId,
-        "category": category
-      };
+  BudgetTotalData(this.category, this.amount);
 }

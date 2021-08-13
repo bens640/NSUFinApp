@@ -32,7 +32,6 @@ class LoanShortDetail extends ConsumerWidget{
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              // SizedBox(height: 50,),
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -45,12 +44,10 @@ class LoanShortDetail extends ConsumerWidget{
                 children: [
                   Text('Interest rate'),
                   Text(NumberFormat.decimalPattern().format(currentLoan.loan.interest)+'%'),
-
                 ],),
               Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text('Term'),
-
                   Text(((currentLoan.loan.term)/12 ).toString() + ' years')
                 ],),
 

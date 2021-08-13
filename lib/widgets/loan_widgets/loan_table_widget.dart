@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nsu_financial_app/providers/providers.dart';
-import 'package:nsu_financial_app/screens/home_screen.dart';
+import 'package:nsu_financial_app/screens/home_screens/home_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../main.dart';

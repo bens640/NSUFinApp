@@ -4,8 +4,10 @@ import 'package:flutter/foundation.dart';
 import 'main.dart';
 import 'models/budget.dart';
 import 'package:http/http.dart' as http;
+import 'models/budget_screen.dart';
 import 'models/category.dart';
 import 'models/document.dart';
+import 'models/transaction.dart';
 
 
 Future attemptLogIn(String username, String password) async {
@@ -67,9 +69,8 @@ Future deleteTrans(int id) async {
         'Authorization': 'Token '+ jwt,
       });
   if (response.statusCode == 204) {
-    print("Deleted");
   } else {
-    throw Exception('Failed to load Budget');
+    throw Exception('Failed to delete transaction');
   }
 }
 
@@ -98,13 +99,7 @@ Future fetchCategories() async {
   }
 }
 
-class BudgetScreenModel{
-  Budget budget;
-  CategoryList category;
-  BudgetScreenModel({required this.budget, required this.category});
 
-
-}
 
 
 Future setBudgetAndCategories() async{
@@ -162,9 +157,7 @@ Future postTrans( Transaction currentTrans) async {
   dynamic jwt = await storage.read(key: 'jwt');
   dynamic id = await storage.read(key: 'id');
   int idInt = int.parse(id);
-
-  var data =currentTrans.toJson(idInt);
-  print(data);
+  var data = currentTrans.toJson(idInt);
   final response = await http.post(Uri.parse(SERVER_IP+'/transaction/'),
       headers: {
         'Content-Type': 'application/json',

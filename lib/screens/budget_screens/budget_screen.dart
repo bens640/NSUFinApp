@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:nsu_financial_app/models/budget.dart';
+import 'package:nsu_financial_app/models/transaction.dart';
 import 'package:nsu_financial_app/providers/providers.dart';
-import 'package:nsu_financial_app/widgets/appBar_widget.dart';
-import 'package:nsu_financial_app/widgets/bottom_app_bar_widget.dart';
+import 'package:nsu_financial_app/widgets/base_widgets/top_app_bar_widget.dart';
+import 'package:nsu_financial_app/widgets/base_widgets/bottom_app_bar_widget.dart';
 import 'package:nsu_financial_app/widgets/budget_widgets/transaction_widget.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'add_trans_screen.dart';
@@ -15,12 +16,11 @@ class BudgetScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    var loggedIn = watch(loggedInProvider);
+    final loggedIn = watch(loggedInProvider);
     final futureBudget = watch(futureBudgetProvider);
-    final apiChange = watch(APIChangeProvider);
 
     return  Scaffold(
-      appBar: BaseAppBar(),
+      appBar: TopAppBar(),
       bottomNavigationBar: BottomBaseBar(),
       body:
       !loggedIn.loggedIn ? Center(
@@ -42,7 +42,10 @@ class BudgetScreen extends ConsumerWidget {
               children: [
                 Text(
                   'Budget Tracker',
-                  style: TextStyle(fontSize: 25),
+                  style: TextStyle(
+                      fontSize: 25,
+                  fontWeight: FontWeight.w600
+                  ),
                 ),
                 Text(
                   "Current Balance",
@@ -62,7 +65,7 @@ class BudgetScreen extends ConsumerWidget {
                       yValueMapper: (BudgetTotalData data,_)=> data.amount,
                       explode: true,
                       dataLabelSettings: DataLabelSettings(isVisible: true),
-                      dataLabelMapper: (BudgetTotalData data, _) => '${d[0].category.list[data.category-1]['name']} - \$${data.amount }',
+                      dataLabelMapper: (BudgetTotalData data, _) => '${d[0].category.list[data.category-1]['name']} - ${NumberFormat.currency(symbol: '\$').format(data.amount) }',
                       enableTooltip: true,
                       enableSmartLabels: true,
 

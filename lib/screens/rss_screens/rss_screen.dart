@@ -2,8 +2,8 @@ import 'dart:io';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:nsu_financial_app/models/rss.dart';
-import 'package:nsu_financial_app/widgets/appBar_widget.dart';
-import 'package:nsu_financial_app/widgets/bottom_app_bar_widget.dart';
+import 'package:nsu_financial_app/widgets/base_widgets/top_app_bar_widget.dart';
+import 'package:nsu_financial_app/widgets/base_widgets/bottom_app_bar_widget.dart';
 import 'package:webfeed/domain/rss_feed.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -36,46 +36,65 @@ class _RssScreenState extends State<RssScreen> {
 
     return
        Scaffold(
-        appBar: BaseAppBar(),
+        appBar: TopAppBar(),
          bottomNavigationBar: BottomBaseBar(),
         body: Container(
-          child: FutureBuilder(
-            future: fetchNews(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                final List<News> _news = snapshot.data as List<News>;
-                return ListView.separated(
-                  itemBuilder: (context, i) {
-                    final News _item = _news[i];
-                    String desc = _item.description!;
-                    desc = Bidi.stripHtmlIfNeeded(desc);
-                    return GestureDetector(
-                      onTap: () => setState(() {
-                        _launched = _launchInWebViewOrVC(_item.link);
-                      }),
-                      child: ListTile(
-                        title: Text('${_item.title}'),
-                        subtitle: Text(
-                          '$desc',
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    );
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
+                child: Center(
+                  child: Text(
+                    'News',
+                    style: TextStyle(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w600
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                height: 645,
+                child: FutureBuilder(
+                  future: fetchNews(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      final List<News> _news = snapshot.data as List<News>;
+                      return ListView.separated(
+                        itemBuilder: (context, i) {
+                          final News _item = _news[i];
+                          String desc = _item.description!;
+                          desc = Bidi.stripHtmlIfNeeded(desc);
+                          return GestureDetector(
+                            onTap: () => setState(() {
+                              _launched = _launchInWebViewOrVC(_item.link);
+                            }),
+                            child: ListTile(
+                              title: Text('${_item.title}'),
+                              subtitle: Text(
+                                '$desc',
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, i) => Divider(),
+                        itemCount: _news.length,
+                      );
+                    } else if (snapshot.hasError) {
+                      return Center(
+                        child: Text(snapshot.error.toString()),
+                      );
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
                   },
-                  separatorBuilder: (context, i) => Divider(),
-                  itemCount: _news.length,
-                );
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(snapshot.error.toString()),
-                );
-              } else {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
+                ),
+              ),
+            ],
           ),
         ),
 

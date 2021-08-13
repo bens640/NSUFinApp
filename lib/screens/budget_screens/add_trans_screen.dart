@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
+import 'package:nsu_financial_app/models/transaction.dart';
 import 'package:nsu_financial_app/network_requests.dart';
 
 import 'package:nsu_financial_app/providers/providers.dart';
 import 'package:nsu_financial_app/screens/budget_screens/budget_screen.dart';
-import 'package:nsu_financial_app/widgets/appBar_widget.dart';
-import 'package:nsu_financial_app/widgets/category_dropdown_list_widget.dart';
+import 'package:nsu_financial_app/widgets/base_widgets/top_app_bar_widget.dart';
+import 'package:nsu_financial_app/widgets/budget_widgets/category_dropdown_list_widget.dart';
 import 'package:numeric_keyboard/numeric_keyboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -131,7 +132,7 @@ class AddOrEditTransaction extends ConsumerWidget {
     }
 
     return Scaffold(
-      appBar: BaseAppBar(),
+      appBar: TopAppBar(),
       body: ListView(padding: EdgeInsets.fromLTRB(0, 15, 0, 0), children: [
         Container(
           height: 40,

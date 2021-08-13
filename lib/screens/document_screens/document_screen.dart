@@ -1,17 +1,11 @@
-import 'dart:async';
 import 'dart:io';
-
-import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:nsu_financial_app/models/document.dart';
-import 'package:nsu_financial_app/widgets/appBar_widget.dart';
-import 'package:nsu_financial_app/widgets/bottom_app_bar_widget.dart';
+import 'package:nsu_financial_app/widgets/base_widgets/top_app_bar_widget.dart';
+import 'package:nsu_financial_app/widgets/base_widgets/bottom_app_bar_widget.dart';
+import 'package:nsu_financial_app/widgets/documents_widget/document_list_widget.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-
-import '../../main.dart';
 import '../../network_requests.dart';
 
 
@@ -35,7 +29,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
 
-      appBar: BaseAppBar(),
+      appBar: TopAppBar(),
       bottomNavigationBar: BottomBaseBar(),
       body: FutureBuilder<List<Document>>(
         future: fetchDocument(),
@@ -46,70 +40,6 @@ class _DocumentScreenState extends State<DocumentScreen> {
               ? DocumentList(documents: snapshot.data!)
               : Center(child: CircularProgressIndicator());
         },
-      ),
-    );
-  }
-}
-
-class DocumentList extends StatelessWidget {
-  final List<Document> documents;
-
-  DocumentList({Key? key, required this.documents}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    return Scaffold(
-
-      body: Column(
-        children: [
-          Stack(children: [
-            Container(
-              height: 100,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color.fromRGBO(10, 36, 99,1),
-                  Color.fromRGBO(176, 212, 232, 1)
-                ],
-              )),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
-              child: Center(child: Text('NSU Documents')),
-            )
-          ]),
-          Expanded(
-            child: ListView.builder(
-              itemCount: documents.length,
-              itemBuilder: (context, index) {
-                return ExpansionTile(
-                  expandedAlignment: Alignment.center,
-                  title: Text(documents[index].title),
-                  children: [
-                    // Text(documents[index].link),
-                    Container(
-                      height: screenHeight * .80,
-                      child: documents[index].type == 'PDF'
-                          ? SfPdfViewer.network(
-                          documents[index].link,
-                      canShowScrollHead: true,
-                      canShowPaginationDialog: false,)
-                          : InteractiveViewer(
-                        panEnabled: true,
-
-                              child: WebView(initialUrl: documents[index].link, )),
-
-                      // child:Text(documents[index].link)
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
-        ],
       ),
     );
   }

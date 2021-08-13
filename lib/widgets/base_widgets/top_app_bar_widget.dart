@@ -6,9 +6,9 @@ import 'package:nsu_financial_app/models/budget.dart';
 import 'package:nsu_financial_app/notifiers/general_notifiers.dart';
 import 'package:nsu_financial_app/providers/providers.dart';
 
-import '../main.dart';
+import '../../main.dart';
 
-class BaseAppBar extends ConsumerWidget implements PreferredSizeWidget {
+class TopAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String title = 'NSU Fin';
   final AppBar appBar = AppBar();
   final List<Widget> widgets = [];

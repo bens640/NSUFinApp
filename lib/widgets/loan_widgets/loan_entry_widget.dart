@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:nsu_financial_app/main.dart';
 import 'package:nsu_financial_app/providers/providers.dart';
-import 'package:nsu_financial_app/screens/home_screen.dart';
+import 'package:nsu_financial_app/screens/home_screens/home_screen.dart';
 
 class LoanEntry extends ConsumerWidget{
 
@@ -13,10 +13,6 @@ class LoanEntry extends ConsumerWidget{
     final currentLoan = watch(loanProvider);
     return Column(
       children: [
-        // Text('Loan Calculator', style: TextStyle(
-        //   fontSize: 30
-        // ),),
-        // SizedBox(height: 10,),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -28,9 +24,6 @@ class LoanEntry extends ConsumerWidget{
                   width: 100,
                   child: TextField(
                     keyboardType: TextInputType.numberWithOptions(decimal: true),
-                    // inputFormatters: [
-                    //   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-                    // ],
                     controller: currentLoan.amount,
                     textAlign: TextAlign.center,
                     decoration: InputDecoration(
@@ -87,7 +80,6 @@ class LoanEntry extends ConsumerWidget{
             onPressed: ()=>{
               // currentLoan.calcAmort(amountController.text,interestController.text,termController.text),
               currentLoan.calcAmort(),
-              currentLoan.printAmort()
             },
             child: Text('Calculate'))
       ],
