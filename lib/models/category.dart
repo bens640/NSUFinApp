@@ -11,7 +11,7 @@ class TransCategory{
   TransCategory({required this.id,required this.isIncome,
     required this.isParent, required this.name, parentCat,});
 
-
+  //Returns an instance of the TransCategory class with given JSON data
   factory TransCategory.fromJson(Map<String, dynamic> json) {
     return TransCategory(
       id: json["id"],
@@ -21,7 +21,7 @@ class TransCategory{
       parentCat: json["parent_cat_id"]
     );
   }
-
+//Returns a JSON string from the supplied TransCategory instance
 Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,
@@ -34,11 +34,7 @@ Map<String, dynamic> toJson() => {
 class CategoryList{
   List<dynamic> list;
   CategoryList({required this.list});
-  // factory CategoryList.fromJson(Map<String, dynamic> json) {
-  //   return CategoryList(
-  //     list: List<TransCategory>.from(json.map((x) => TransCategory.fromJson(x))),
-  //   );
-  // }
+
   factory CategoryList.fromJson(Map<String, dynamic> json) =>
       CategoryList(list: List<TransCategory>.from(json[0].map((x) => TransCategory.fromJson(x))),
   );

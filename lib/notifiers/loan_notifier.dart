@@ -39,18 +39,6 @@ class LoanChangeNotifier extends ChangeNotifier {
     loan.term = 0;
     loan.schedule = [];
   }
-  // void printAmort(){
-  //   print('Total loan amount:\t${loan.amount}');
-  //   print("Interest rate:\t\t${loan.interest}%");
-  //   print("Term:\t\t\t\t${loan.term} months");
-  //   print('Monthly payment:\t${loan.monthlyPayment}');
-  //   print('Annual payment:\t\t${loan.monthlyPayment * 12}');
-  //   print('Total Interest:\t\t${loan.monthlyPayment * loan.term - loan.amount}');
-  //   print("Total Payment:\t\t${loan.totalInterest + loan.amount} ");
-  //
-  //   ;
-  //
-  // }
 
 
 
